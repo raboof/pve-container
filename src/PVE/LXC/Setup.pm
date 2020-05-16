@@ -71,7 +71,7 @@ my $autodetect_type = sub {
     } elsif (-f  "$rootdir/etc/gentoo-release") {
 	return "gentoo";
     }
-    die "unable to detect OS distribution\n";
+    return "unmanaged";
 };
 
 sub new {
@@ -92,6 +92,10 @@ sub new {
 
 	warn "got unexpected ostype ($type != $expected_type)\n"
 	    if $type ne $expected_type;
+    }
+
+    if ($type eq 'unmanaged') {
+        return $self;
     }
 
     my $plugin_class = $plugins->{$type} ||
